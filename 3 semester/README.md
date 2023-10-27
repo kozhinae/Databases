@@ -49,18 +49,53 @@ group by ProductSubcategoryID
 
 7. Найти и вывести на экран номера товаров и количество фактов продаж данного
 товара (используется таблица SalesORDERDetail):
-8. Найти и вывести на экран номера товаров, которые были куплены более пяти
+
+select ProductID, count(*)
+from Sales.SalesOrderDetail
+group by ProductID
+
+9. Найти и вывести на экран номера товаров, которые были куплены более пяти
 раз.
-9. Найти и вывести на экран номера покупателей, CustomerID, у которых
+
+select ProductID, count(*)
+from Sales.SalesOrderDetail
+group by ProductID
+having count(*) > 5
+
+11. Найти и вывести на экран номера покупателей, CustomerID, у которых
 существует более одного чека, SalesORDERID, с одинаковой датой
-10. Найти и вывести на экран все номера чеков, на которые приходится более трех
+
+select CustomerID
+from Sales.Customer, Sales.SalesOrderDetail
+group by CustomerID
+having count(Sales.SalesOrderDetail.SalesOrderID)>1
+
+13. Найти и вывести на экран все номера чеков, на которые приходится более трех
 продуктов.
-11. Найти и вывести на экран все номера продуктов, которые были куплены более
+
+select SalesOrderID, OrderQty
+from Sales.SalesOrderDetail
+group by SalesOrderID, OrderQty
+having SalesOrderDetail.OrderQty > 3
+
+15. Найти и вывести на экран все номера продуктов, которые были куплены более
 трех раз.
-12. Найти и вывести на экран все номера продуктов, которые были куплены или
+
+select ProductID, OrderQty
+from Sales.SalesOrderDetail
+group by ProductID, OrderQty
+having SalesOrderDetail.OrderQty > 3
+
+17. Найти и вывести на экран все номера продуктов, которые были куплены или
 три или пять раз.
 
-13. Найти и вывести на экран все номера подкатегорий, в которым относится
+select ProductID, OrderQty
+from Sales.SalesOrderDetail
+where ProductID is not null
+group by ProductID, OrderQty
+having OrderQty = 3 or OrderQty = 5
+
+19. Найти и вывести на экран все номера подкатегорий, в которым относится
 более десяти товаров:
 
 select ProductSubcategoryID, count(*)
@@ -72,14 +107,30 @@ having count(*) > 10
 14. Найти и вывести на экран номера товаров, которые всегда покупались в
 одном экземпляре за одну покупку.
 
-15. Найти и вывести на экран номер чека, SalesORDERID, на который приходится
+select ProductID, OrderQty
+from Sales.SalesOrderDetail
+where ProductID is not null
+group by ProductID, OrderQty
+having OrderQty = 1
+
+16. Найти и вывести на экран номер чека, SalesORDERID, на который приходится
 с наибольшим разнообразием товаров купленных на этот чек.
 
-16. Найти и вывести на экран номер чека, SalesORDERID с наибольшей суммой
+select Top 1 SalesOrderID, count(DISTINCT ProductID)
+from Sales.SalesOrderDetail
+group by SalesOrderID
+order by count(DISTINCT ProductID) desc
+
+18. Найти и вывести на экран номер чека, SalesORDERID с наибольшей суммой
 покупки, исходя из того, что цена товара – это UnitPrice, а количество
 конкретного товара в чеке – это ORDERQty.
 
-17. Определить количество товаров в каждой подкатегории, исключая товары,
+select Top 1 SalesOrderID, sum(UnitPrice * OrderQty)
+from Sales.SalesOrderDetail
+group by SalesOrderID
+order by sum(UnitPrice * OrderQty) desc
+
+20. Определить количество товаров в каждой подкатегории, исключая товары,
 для которых подкатегория не определена, и товары, у которых не определен цвет:
 
 select ProductSubcategoryID, count(*)
@@ -98,5 +149,6 @@ order by count(Color) desc
 
 19. Вывести на экран ProductID тех товаров, что всегда покупались в количестве
 более 1 единицы на один чек, при этом таких покупок было более двух: 
+
 
 
