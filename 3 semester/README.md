@@ -66,9 +66,9 @@ having count(*) > 5
 существует более одного чека, SalesORDERID, с одинаковой датой
 
 select CustomerID
-from Sales.Customer, Sales.SalesOrderDetail
-group by CustomerID
-having count(Sales.SalesOrderDetail.SalesOrderID)>1
+from Sales.SalesOrderHeader
+group by CustomerID, OrderDate
+having count(OrderDate) > 1
 
 13. Найти и вывести на экран все номера чеков, на которые приходится более трех
 продуктов.
