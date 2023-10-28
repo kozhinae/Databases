@@ -150,5 +150,8 @@ order by count(Color) desc
 19. Вывести на экран ProductID тех товаров, что всегда покупались в количестве
 более 1 единицы на один чек, при этом таких покупок было более двух: 
 
-
+select ProductID
+from Sales.SalesOrderDetail
+group by ProductID
+having count(SalesOrderID) > 2 and count(OrderQty) > 1
 
