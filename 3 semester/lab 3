@@ -1,0 +1,77 @@
+select p.Name, pc.Name
+from Production.Product as p inner join
+    Production.ProductSubcategory as ps
+on p.ProductSubcategoryID = ps.ProductSubcategoryID
+inner join production.ProductCategory as pc
+on ps.ProductCategoryID = pc.ProductCategoryID
+where Color = 'Red' and ListPrice >= 100
+
+select ps1.Name
+from Production.ProductSubcategory as ps1 ,
+    Production.ProductSubcategory as ps
+where ps1.Name = ps.Name and ps1.ProductSubcategoryID!=ps.ProductSubcategoryID
+
+select pc.Name, count(*)
+from production.Product as p inner join  production.ProductSubcategory as ps
+on p.ProductSubcategoryID = ps.ProductSubcategoryID
+inner join production.ProductCategory as pc
+on ps.ProductCategoryID = pc.ProductCategoryID
+group by pc.Name
+
+select ps.Name, count(*)
+from production.Product as p inner join  production.ProductSubcategory as ps
+on p.ProductSubcategoryID = ps.ProductSubcategoryID
+group by ps.Name
+
+select top 3 ps.Name
+from production.ProductSubcategory as ps
+group by ps.Name
+order by count(*) desc
+
+select ps.Name, max(ListPrice)
+from production.Product as p inner join production.ProductSubcategory as ps
+on p.ProductSubcategoryID = ps.ProductSubcategoryID
+where Color = 'Red'
+group by ps.Name
+
+select pv.BusinessEntityID, count(p.ProductID)
+from production.Product as p inner join Purchasing.ProductVendor as pv
+on p.ProductID = pv.ProductID
+group by pv.BusinessEntityID
+
+select p.Name
+from production.Product as p inner join Purchasing.ProductVendor as pv
+on p.ProductID = pv.ProductID
+group by p.Name
+having count(BusinessEntityID) > 1
+
+select top 1 p.Name
+from production.Product as p inner join Purchasing.ProductVendor as pv
+on p.ProductID = pv.ProductID
+group by p.Name
+order by count(OnOrderQty) desc
+
+select top 1 pc.Name
+from production.Product as p inner join production.ProductSubcategory as ps
+on p.ProductSubcategoryID = ps.ProductSubcategoryID
+inner join production.ProductCategory as pc
+on ps.ProductCategoryID = pc.ProductCategoryID
+inner join Purchasing.ProductVendor as pv
+on p.ProductID = pv.ProductID
+group by pc.Name
+order by count(OnOrderQty) desc
+
+select pc.Name, count(ps.ProductSubcategoryID), count(OnOrderQty)
+from production.Product as p inner join production.ProductSubcategory as ps
+on p.ProductSubcategoryID = ps.ProductSubcategoryID
+inner join production.ProductCategory as pc
+on ps.ProductCategoryID = pc.ProductCategoryID
+inner join Purchasing.ProductVendor as pv
+on p.ProductID = pv.ProductID
+group by pc.Name
+order by count(OnOrderQty) desc
+
+select CreditRating, count(OnOrderQty)
+from Purchasing.Vendor as pv inner join Purchasing.ProductVendor as ppv
+on pv.BusinessEntityID = ppv.BusinessEntityID
+group by CreditRating
